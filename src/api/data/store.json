@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "Hello",
+        "content": "Soccer",
+        "author": "Leon Goretzka",
+        "published": true
+    },
+    {
+        "id": 2,
+        "title": "Hello",
+        "content": "Programming",
+        "author": "Mosh Hamedani",
+        "published": true
+    },
+    {
+        "id": 3,
+        "title": "Hello",
+        "content": "Programming",
+        "author": "Leon Goretzka",
+        "published": true
+    }
+]

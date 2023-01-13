@@ -4,7 +4,7 @@
  */
 
 
-
+import type { Context } from "./../context"
 
 
 
@@ -28,12 +28,13 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Mutation: {};
   Post: { // root type
-    author?: string | null; // String
-    content?: string | null; // String
-    id?: number | null; // Int
-    published?: boolean | null; // Boolean
-    title?: string | null; // String
+    author: string; // String!
+    content: string; // String!
+    id: number; // Int!
+    published: boolean; // Boolean!
+    title: string; // String!
   }
   Query: {};
 }
@@ -49,19 +50,27 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Mutation: { // field return type
+    createPost: NexusGenRootTypes['Post']; // Post!
+    publish: NexusGenRootTypes['Post']; // Post!
+  }
   Post: { // field return type
-    author: string | null; // String
-    content: string | null; // String
-    id: number | null; // Int
-    published: boolean | null; // Boolean
-    title: string | null; // String
+    author: string; // String!
+    content: string; // String!
+    id: number; // Int!
+    published: boolean; // Boolean!
+    title: string; // String!
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  Mutation: { // field return type name
+    createPost: 'Post'
+    publish: 'Post'
+  }
   Post: { // field return type name
     author: 'String'
     content: 'String'
@@ -70,11 +79,21 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    posts: 'Post'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createPost: { // args
+      author: string; // String!
+      content: string; // String!
+      title: string; // String!
+    }
+    publish: { // args
+      id: number; // Int!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {
@@ -108,7 +127,7 @@ export type NexusGenFeaturesConfig = {
 }
 
 export interface NexusGenTypes {
-  context: any;
+  context: Context;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   inputTypeShapes: NexusGenInputs & NexusGenEnums & NexusGenScalars;
