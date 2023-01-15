@@ -11,7 +11,6 @@ export  class DbClient{
         newPost.id = posts.length+1;
         posts.push(newPost);
         writeFileSync(join(__dirname, './store.json'), JSON.stringify(posts),{encoding: 'utf-8', flag : "w"});
-        console.log("File written successfully");
         return JSON.parse(JSON.stringify(newPost))
     }
     updatePost(updatePost: Post):Post {

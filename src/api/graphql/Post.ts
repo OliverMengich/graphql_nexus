@@ -1,4 +1,4 @@
-import { objectType, extendType,interfaceType, stringArg, nonNull, intArg } from "nexus";
+import { objectType, extendType, stringArg, nonNull, intArg } from "nexus";
 export const Post = objectType({
     name: 'Post',
     definition(t) {
@@ -15,10 +15,6 @@ export const PostQuery = extendType({
         t.list.field('posts', {
             type: 'Post',
             async resolve(_root, _args, ctx) {
-                // return [{id: 1,title: "Hello",content: "Programming",published: true,author: "Mosh Hamedani"}]
-                console.log(await ctx.db.getPosts())
-                console.log('finished fetching data');
-
                 return await ctx.db.getPosts() ? ctx.db.getPosts() : [];
             },
         })
@@ -50,10 +46,21 @@ export const PostMutation = extendType({
         t.nonNull.field('publish',{
             type: Post,
             args: {
-                id: nonNull(intArg())
+                id: nonNull(intArg()),
+                title: nonNull(stringArg()),
+                content: nonNull(stringArg()),
+                author: nonNull(stringArg())
             },
-            resolve(_root, args,ctx){
-                let draftToPublish = ctx.db.getPosts()?.find((draft: any)=>draft.id===args.id);
+            async resolve(_root, args,ctx){
+                // let draftToPublish = ctx.db.getPosts()?.find((draft: any)=>draft.id===args.id);
+                const draft = {
+                    id: 0,
+                    title: args.title,
+                    content: args.content,
+                    author: args.author,
+                    published: false
+                }
+                let draftToPublish = await ctx.db.updatePost(draft)
                 if (!draftToPublish) {
                     throw new Error("Couldn't find draft")
                 }

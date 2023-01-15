@@ -91,7 +91,10 @@ export interface NexusGenArgTypes {
       title: string; // String!
     }
     publish: { // args
+      author: string; // String!
+      content: string; // String!
       id: number; // Int!
+      title: string; // String!
     }
   }
 }
