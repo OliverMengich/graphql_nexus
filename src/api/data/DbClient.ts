@@ -1,28 +1,25 @@
-import { readFile, writeFile } from "fs";
+import { readFile,readFileSync, writeFile, writeFileSync } from "fs";
 import { join } from "path";
 import { Post } from "./db";
-export class DbClient{
-    addPost(newPost: Post): Post | void{
-        const res: any= readFile(join(__dirname,'./store.json'),'utf-8',(err,data)=>{
-            if (err) {
-                return JSON.stringify({
-                    err,
-                })
-            }
-            return data
-        });
-        if (!res.data)return undefined;
-        
-        const posts: Post[] = JSON.parse(res);
+export  class DbClient{
+    getPosts(): Post[]{
+        const posts: Post[] =  JSON.parse(readFileSync(join(__dirname, './store.json'), 'utf-8'))
+        return posts;
+    }
+    addPost(newPost: Post): Post{
+        const posts: Post[]= JSON.parse(readFileSync(join(__dirname,'./store.json'),'utf-8'));
+        newPost.id = posts.length+1;
         posts.push(newPost);
-        const response: any =  writeFile(join(__dirname, './store.json'), JSON.stringify(posts), (err) => {
-            if (err) {
-                return JSON.stringify({
-                    err,
-                })
-            }
-        });
-        if(!res.data) return undefined
-        return JSON.parse(response);
+        writeFileSync(join(__dirname, './store.json'), JSON.stringify(posts),{encoding: 'utf-8', flag : "w"});
+        console.log("File written successfully");
+        return JSON.parse(JSON.stringify(newPost))
+    }
+    updatePost(updatePost: Post):Post {
+        const posts: Post[] = JSON.parse(readFileSync(join(__dirname,'./store.json'),'utf-8'));
+        const {id} = updatePost;
+        const idx = posts.findIndex(x=>x.id===id);
+        posts[idx] = updatePost;
+        writeFileSync(join(__dirname,'./store.json'),JSON.stringify(posts), {encoding: 'utf-8', flag: "w"});   
+        return JSON.parse(JSON.stringify(posts[idx]));
     }
 }
